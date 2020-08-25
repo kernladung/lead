@@ -29,6 +29,7 @@ SOFTWARE.
 
 
 #include "sensor.h"
+#include "screenname.h"
 #include <QApplication>
 #include <QList>
 #include <QSettings>
@@ -51,6 +52,8 @@ private:
     QSettings settings;
     QFileSystemWatcher watcher;
     QList<Sensor*> sensors;
+    QList<ScreenName*> screenNames;
+    bool debugMode;
 
     void screenAdded(QScreen* screen);
     void screenRemoved(QScreen* screen);
@@ -58,6 +61,7 @@ private:
     void loadScreens();
     void loadScreen(QScreen* screen);    
     void loadSensor(QScreen* screen, QString name, int x, int y, int w, int h);
+    void loadScreenNameDisplay(QScreen* screen);
     void reloadScreens();
     
 public slots:

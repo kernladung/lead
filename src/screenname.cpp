@@ -25,45 +25,36 @@ SOFTWARE.
 */
 
 
-#pragma once
+#include "screenname.h"
+#include <QEvent>
+#include <QDebug>
+#include <QProcess>
+#include <QLabel>
+#include <QHBoxLayout>
 
-
-#include <QWidget>
-#include <QScreen>
-#include <QTimer>
-
+#define SCREENNAME_WIDTH 150
+#define SCREENNAME_HEIGHT 45
 
 namespace Lead {
+    ScreenName::ScreenName(QScreen* screen):
+            QWidget()
+    {
+        qDebug()
+                << "lead::ScreenName() " << screen->name ();
+        QRect rec = screen->geometry();
 
+        setGeometry(rec.x(), rec.y(), SCREENNAME_WIDTH, SCREENNAME_HEIGHT);
+        setAttribute(Qt::WA_TranslucentBackground, true);
+        setWindowFlags(windowFlags() | Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint );
 
-class Sensor : public QWidget
-{
-    Q_OBJECT
+        // create the text widget and put it in the widget
+        QHBoxLayout *layout = new QHBoxLayout ();
+        QLabel* label = new QLabel ();
+        label->setText (screen->name ());
+        layout->addWidget (label);
 
-public:
-    explicit Sensor(int x, int y, int w, int h, QString enterAction, QString exitAction, int enterInterval, int exitInterval, bool debugMode);
-    ~Sensor();
+        setLayout (layout);
 
-protected:
-    void enterEvent(QEvent * event);
-    void leaveEvent(QEvent * event);
-
-private:
-    QString enterAction;
-    QString exitAction;
-    QTimer *enterTimer;
-    QTimer *exitTimer;
-    int enterInterval;
-    int exitInterval;
-    bool canTriggerExit;
-    bool debugMode;
-
-public slots:
-    void activateEnter();
-    void activateExit();
-
-
-};
-
-
+        show();
+    }
 } // namespace

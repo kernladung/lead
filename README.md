@@ -1,7 +1,10 @@
 *lead* provides hot-corners for your desktop, notably for openbox, awesome, i3 and other window managers.
 
-![Screenshot of lead](https://github.com/mlde/lead/blob/master/screenshot.png)
-> Despite the screenshot, the sensors are only 1px in size and invisible.
+This fork adds support for specifying an interval to wait before the action is triggered. There may be more improvements in the future.
+
+![Screenshot of lead](https://github.com/almamu/lead/blob/master/screenshots/screenshot1.png)
+![Screenshot of lead](https://github.com/almamu/lead/blob/master/screenshots/screenshot2.png)
+> Sensors are not displayed unless the debug mode is enabled
 
 
 ### Features
@@ -33,10 +36,6 @@ To build *lead* open a terminal in the root folder of the repository and:
 - Qt5Gui 
 - Qt5Core
 
-### Build
-
-A build `lead` is provided in `data/usr/bin/`. It was build on my arch64 system.
-
 
 # Install it
 
@@ -64,19 +63,32 @@ If none of these exists, it will create `~/.config/lead/lead.conf` with default 
     topLeft=
     topRight=
 
-To enable a action for a sensor, simply add a command to the corner or side:
+Sensors have their own sections in the configuration, so if you want to add an action to a corner you can do so:
 
     [eDP1]
-    bottom=
-    bottomLeft=chromium
-    bottomRight=thunar
-    left=
-    right=
-    top=
-    topLeft=californium toggle
-    topRight=skippy-xd
+    bottomLeft=SensorName
 
-Used config-files and theme-files are monitored and changes are applied automatically.
+    [SensorName]
+    enterAction=chromium
+    exitAction=firefox
+    enterDelay=5000
+    exitDelay=1000
+
+Delays are configured in miliseconds and dictate the amount of time the mouse has to be in the sensor to trigger the specific action.
+In the case of exitDelay, this delay affects how much time the mouse has to be in the sensor for it to trigger the exitAction when the mouse moves out of the sensor.
+
+If you are not sure why a sensor isn't properly firing you can enable the debug mode to visualize what their position is, your screen names and the status they're in.
+Each configured sensor will be displayed in a red color when the sensor is waiting for the mouse to enter it.
+Once the mouse is in, the sensor will turn to yellow, this indicates that it is waiting for the enter delay timer to end. Once the timer ends the sensor will turn green and the program should be run.
+If still your program doesn't run please check lead's output to get a better idea of what's happening.
+
+In debug mode the screen names are shown on the top-left corner of each screen.
+To enable the debug mode add the following section in the config file:
+
+    [systemsettings]
+    debug=1
+
+The configuration file is monitored and changes are applied automatically.
 
 
 # Use it
@@ -96,3 +108,13 @@ To uninstall *lead* open a terminal in the root folder of the repository and:
 # Drawbacks
 
 I didnt want to poll the mouse, so i created sensors which works with events. The sensors are transparent, but need a running compositor like compton for that. Without a compositor, they are black.
+
+# TODO
+
+Improvements that need to be made:
+
+- Error checking of the conf file; e.g. check that an integer was set for the interval
+
+Possible new features:
+
+- Custom regions

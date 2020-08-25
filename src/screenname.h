@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2017 Noah Andreas
+Copyright (c) 2017 Alexis Maiquez
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,40 +30,19 @@ SOFTWARE.
 
 #include <QWidget>
 #include <QScreen>
-#include <QTimer>
 
 
 namespace Lead {
 
 
-class Sensor : public QWidget
-{
-    Q_OBJECT
+    class ScreenName : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    explicit Sensor(int x, int y, int w, int h, QString enterAction, QString exitAction, int enterInterval, int exitInterval, bool debugMode);
-    ~Sensor();
-
-protected:
-    void enterEvent(QEvent * event);
-    void leaveEvent(QEvent * event);
-
-private:
-    QString enterAction;
-    QString exitAction;
-    QTimer *enterTimer;
-    QTimer *exitTimer;
-    int enterInterval;
-    int exitInterval;
-    bool canTriggerExit;
-    bool debugMode;
-
-public slots:
-    void activateEnter();
-    void activateExit();
-
-
-};
+    public:
+        explicit ScreenName(QScreen* screen);
+        virtual ~ScreenName() {}
+    };
 
 
 } // namespace
